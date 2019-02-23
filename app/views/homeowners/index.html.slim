@@ -1,0 +1,28 @@
+h1 Listing homeowners
+div.table-responsive
+
+  - @homeowners.each do |street, homeowners|
+    table.table.table-striped.table-sm style="margin-bottom:20px;width:600px;"
+      thead
+        tr
+          th.text-center style="font-weight:bold;font-size:16px;" colspan="5"
+            = street
+        tr
+          th Name
+          th Active
+          th
+          th
+          th
+      tbody
+        - homeowners.each do |homeowner|
+          tr
+            td = homeowner.full_name
+            td = homeowner.active? ? 'Yes' : 'No'
+            td = link_to 'Show', homeowner
+            td = link_to 'Edit', edit_homeowner_path(homeowner)
+            td = link_to 'Destroy', homeowner, data: { confirm: 'Are you sure?' }, method: :delete
+    hr
+
+
+
+= link_to 'New Homeowner', new_homeowner_path

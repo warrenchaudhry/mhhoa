@@ -16,7 +16,11 @@ module Mhhoa
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
     config.generators do |g|
+      g.template_engine :slim
+      g.stylesheets     false
+      g.javascripts     false
       g.test_framework :rspec
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
     end
   end
 end

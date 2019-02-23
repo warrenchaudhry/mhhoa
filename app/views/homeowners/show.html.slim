@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Firstname:
+  = @homeowner.firstname
+p
+  strong Mi:
+  = @homeowner.mi
+p
+  strong Lastname:
+  = @homeowner.lastname
+p
+  strong Street:
+  = @homeowner.street
+p
+  strong Active:
+  = @homeowner.active
+
+=> link_to 'Edit', edit_homeowner_path(@homeowner)
+'|
+=< link_to 'Back', homeowners_path
