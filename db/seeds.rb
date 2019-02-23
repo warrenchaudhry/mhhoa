@@ -12,7 +12,7 @@ streets.each do |street|
 end
 
 homeowners_data_file = Rails.root.join('data', 'homeowners.json')
-puts "Building homeowners data"
+puts 'Building homeowners data'
 if File.exist?(homeowners_data_file)
   contents = File.read(homeowners_data_file)
   parsed_data = JSON.parse(contents)

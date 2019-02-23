@@ -9,8 +9,7 @@ class StreetsController < ApplicationController
 
   # GET /streets/1
   # GET /streets/1.json
-  def show
-  end
+  def show; end
 
   # GET /streets/new
   def new
@@ -18,8 +17,7 @@ class StreetsController < ApplicationController
   end
 
   # GET /streets/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /streets
   # POST /streets.json
@@ -62,6 +60,7 @@ class StreetsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_street
     @street = Street.find(params[:id])

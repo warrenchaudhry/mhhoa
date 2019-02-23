@@ -1,1 +1,1 @@
-json.partial! "homeowners/homeowner", homeowner: @homeowner
+json.partial! 'homeowners/homeowner', homeowner: @homeowner

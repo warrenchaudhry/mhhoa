@@ -1,24 +1,8 @@
-= form_for @homeowner do |f|
-  - if @homeowner.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@homeowner.errors.count, "error")} prohibited this homeowner from being saved:"
-      ul
-        - @homeowner.errors.full_messages.each do |message|
-          li = message
-
-  .field
-    = f.label :firstname
-    = f.text_field :firstname
-  .field
-    = f.label :mi
-    = f.text_field :mi
-  .field
-    = f.label :lastname
-    = f.text_field :lastname
-  .field
-    = f.label :street_id
-    = f.collection_select :street_id, Street.all, :id, :name
-  .field
-    = f.label :active
-    = f.check_box :active
-  .actions = f.submit
+= simple_form_for @homeowner, wrapper: :horizontal_form do |f|
+  = f.input :firstname
+  = f.input :lastname
+  = f.input :street_id, collection: Street.all, prompt: '-- Select street --', include_blank: true
+  = f.input :monthly_dues_discount
+  = f.input :payment_starts_on
+  = f.input :active
+  = f.button :submit, class: 'btn btn-sm btn-primary'

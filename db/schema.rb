@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_23_130720) do
+ActiveRecord::Schema.define(version: 2019_02_23_180949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,10 +20,21 @@ ActiveRecord::Schema.define(version: 2019_02_23_130720) do
     t.string "mi"
     t.string "lastname"
     t.bigint "street_id"
-    t.boolean "active", default: true
+    t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "payment_starts_on", default: "2012-01-01"
+    t.decimal "monthly_dues_discount", precision: 8, scale: 2, default: "0.0"
     t.index ["street_id"], name: "index_homeowners_on_street_id"
+  end
+
+  create_table "monthly_due_rates", force: :cascade do |t|
+    t.decimal "amount", precision: 8, scale: 2, default: "400.0"
+    t.date "start_date", default: "2018-01-01"
+    t.date "end_date"
+    t.boolean "recurring", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "streets", force: :cascade do |t|

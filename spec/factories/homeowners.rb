@@ -5,5 +5,7 @@ FactoryBot.define do
     lastname { Faker::Name.first_name }
     street
     active { true }
+    payment_starts_on { '2018-01-01' }
+    monthly_dues_discount { 0 }
   end
 end

@@ -11,28 +11,27 @@ RSpec.describe StreetsController, type: :routing do
     end
 
     it 'routes to #show' do
-      expect(get: '/streets/1').to route_to('streets#show', id:  '1')
+      expect(get: '/streets/1').to route_to('streets#show', id: '1')
     end
 
     it 'routes to #edit' do
-      expect(get: '/streets/1/edit').to route_to('streets#edit', id:  '1')
+      expect(get: '/streets/1/edit').to route_to('streets#edit', id: '1')
     end
-
 
     it 'routes to #create' do
       expect(post: '/streets').to route_to('streets#create')
     end
 
     it 'routes to #update via PUT' do
-      expect(put: '/streets/1').to route_to('streets#update', id:  '1')
+      expect(put: '/streets/1').to route_to('streets#update', id: '1')
     end
 
     it 'routes to #update via PATCH' do
-      expect(patch: '/streets/1').to route_to('streets#update', id:  '1')
+      expect(patch: '/streets/1').to route_to('streets#update', id: '1')
     end
 
     it 'routes to #destroy' do
-      expect(delete: '/streets/1').to route_to('streets#destroy', id:  '1')
+      expect(delete: '/streets/1').to route_to('streets#destroy', id: '1')
     end
   end
 end

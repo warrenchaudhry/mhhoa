@@ -4,7 +4,7 @@ class HomeownersController < ApplicationController
   # GET /homeowners
   # GET /homeowners.json
   def index
-    @homeowners = Homeowner.joins(:street).includes(:street).group_by {|h| h.street.name }
+    @homeowners = Homeowner.joins(:street).includes(:street).group_by { |h| h.street.name }
     respond_to do |format|
       format.html
       format.json { render json: @homeowners }
@@ -13,8 +13,7 @@ class HomeownersController < ApplicationController
 
   # GET /homeowners/1
   # GET /homeowners/1.json
-  def show
-  end
+  def show; end
 
   # GET /homeowners/new
   def new
@@ -22,8 +21,7 @@ class HomeownersController < ApplicationController
   end
 
   # GET /homeowners/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /homeowners
   # POST /homeowners.json
@@ -66,13 +64,14 @@ class HomeownersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_homeowner
-      @homeowner = Homeowner.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def homeowner_params
-      params.require(:homeowner).permit(:firstname, :mi, :lastname, :street_id, :active)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_homeowner
+    @homeowner = Homeowner.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def homeowner_params
+    params.require(:homeowner).permit(:firstname, :mi, :lastname, :street_id, :active, :payment_starts_on, :monthly_dues_discount)
+  end
 end

@@ -11,28 +11,27 @@ RSpec.describe HomeownersController, type: :routing do
     end
 
     it 'routes to #show' do
-      expect(get: '/homeowners/1').to route_to('homeowners#show', id:  '1')
+      expect(get: '/homeowners/1').to route_to('homeowners#show', id: '1')
     end
 
     it 'routes to #edit' do
-      expect(get: '/homeowners/1/edit').to route_to('homeowners#edit', id:  '1')
+      expect(get: '/homeowners/1/edit').to route_to('homeowners#edit', id: '1')
     end
-
 
     it 'routes to #create' do
       expect(post: '/homeowners').to route_to('homeowners#create')
     end
 
     it 'routes to #update via PUT' do
-      expect(put: '/homeowners/1').to route_to('homeowners#update', id:  '1')
+      expect(put: '/homeowners/1').to route_to('homeowners#update', id: '1')
     end
 
     it 'routes to #update via PATCH' do
-      expect(patch: '/homeowners/1').to route_to('homeowners#update', id:  '1')
+      expect(patch: '/homeowners/1').to route_to('homeowners#update', id: '1')
     end
 
     it 'routes to #destroy' do
-      expect(delete: '/homeowners/1').to route_to('homeowners#destroy', id:  '1')
+      expect(delete: '/homeowners/1').to route_to('homeowners#destroy', id: '1')
     end
   end
 end

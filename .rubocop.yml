@@ -6,7 +6,8 @@ AllCops:
     - 'db/fixtures/**/*'
     - 'tmp/**/*'
     - 'bin/**'
-
+    - 'config/initializers/simple_form_bootstrap.rb'
+    - 'config/initializers/simple_form.rb'
 
 Naming/AccessorMethodName:
   Description: Check the naming of accessor methods for get_/set_.
@@ -102,6 +103,7 @@ Metrics/BlockLength:
   ExcludedMethods: []
   Exclude:
     - "spec/**/*"
+    - 'config/initializers/simple_form_bootstrap.rb'
 
 Metrics/CyclomaticComplexity:
   Description: >-
@@ -394,6 +396,7 @@ Style/TrailingCommaInHashLiteral:
     - config/environments/development.rb
     - config/environments/test.rb
     - config/environments/production.rb
+    - config/initializers/simple_form.rb
 
 Style/TrivialAccessors:
   Description: 'Prefer attr_* methods to trivial readers/writers.'
@@ -469,6 +472,11 @@ Layout/InitialIndentation:
 Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: true
   Exclude: ['config/environments/**']
+
+Layout/AlignHash:
+  Enabled: true
+  Exclude:
+    - 'config/initializers/simple_form_bootstrap.rb'
 
 # Lint
 
@@ -683,3 +691,10 @@ Style/SymbolArray:
   Enabled: false
   Exclude:
     - 'Gemfile'
+
+Style/FormatStringToken:
+  Exclude: ['db/seeds.rb']
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'spec/controllers/**'
