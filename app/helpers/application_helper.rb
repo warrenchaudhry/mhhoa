@@ -16,4 +16,12 @@ module ApplicationHelper
   def yes_or_no(val)
     val ? 'Yes' : 'No'
   end
+
+  def col_bg(status = nil)
+    if status == 'inactive'
+      'bg-warning'
+    elsif status == 'paid'
+      'bg-success'
+    end
+  end
 end

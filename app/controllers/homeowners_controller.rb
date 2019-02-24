@@ -4,7 +4,7 @@ class HomeownersController < ApplicationController
   # GET /homeowners
   # GET /homeowners.json
   def index
-    @homeowners = Homeowner.joins(:street).includes(:street).group_by { |h| h.street.name }
+    @homeowners = Homeowner.joins(:street).includes(:street).order('streets.position ASC').group_by { |h| h.street.name }
     respond_to do |format|
       format.html
       format.json { render json: @homeowners }
@@ -64,7 +64,8 @@ class HomeownersController < ApplicationController
   end
 
   def payments
-    @payments_data = Homeowner.payments_data
+    params[:year] ||= Date.today.year
+    @payments_data = Homeowner.payments_data(year: params[:year])
     #render json: @payments_data
   end
 
@@ -76,7 +77,7 @@ class HomeownersController < ApplicationController
       render json: not_processed
     else
       flash[:success] = "Successfully processed #{processed.size} payments."
-      redirect_to payments_homeowners_path
+      redirect_to payments_homeowners_path(year: params[:year])
     end
 
   end

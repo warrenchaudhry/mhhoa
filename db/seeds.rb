@@ -7,8 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 streets = %w(Aster Gladiola Howthorne Iris Larkspur Narcissus Marigold Primrose)
-streets.each do |street|
-  Street.find_or_create_by(name: street)
+streets.each_with_index do |name, idx|
+  street = Street.find_by(name: name)
+  unless street
+    Street.create!(name: name, position: idx)
+  end
 end
 
 homeowners_data_file = Rails.root.join('data', 'homeowners.json')
@@ -19,10 +22,13 @@ if File.exist?(homeowners_data_file)
   parsed_data.each do |key, data|
     street = Street.find_by('LOWER(name) = ?', key.strip.downcase)
     if street
-      data.each do |person|
+      data.each_with_index do |person, idx|
         lastname, firstname = person.split(', ').map(&:titleize)
         if firstname && lastname
-          Homeowner.find_or_create_by(street_id: street.id, firstname: firstname.strip, lastname: lastname)
+          homeowner = Homeowner.find_by(street_id: street.id, firstname: firstname.strip, lastname: lastname)
+          unless homeowner
+            Homeowner.create(street_id: street.id, firstname: firstname.strip, lastname: lastname, position: idx)
+          end
         else
           puts 'Unable to store data for %s in street %s' % [person, street.name]
         end

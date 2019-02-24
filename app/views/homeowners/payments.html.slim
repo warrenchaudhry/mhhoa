@@ -1,27 +1,35 @@
-h1 Payments
+h1 Payments for #{params[:year]}
 div.table-responsive
   = form_tag(controller: :homeowners, action: :process_payments)
+    = hidden_field_tag :year, params[:year]
     = label_tag :paid_at, 'Payment Date: ', class: 'col-sm-2 col-form-label'
     = date_field_tag :paid_at, Date.today, class: 'form-control col-sm-3'
     / = text_field_tag :paid_at, Date.today, class: 'form-control col-sm-6 datetimepicker-input', id: 'datepicker', readonly: true, data: { toggle: 'datetimepicker', target: '#datepicker' }
     - @payments_data.each do |street, homeowners|
       table.table.table-bordered.table-hover.table-sm.m-t-20 style="margin-bottom:20px;margin-top:20px;"
         thead
-          tr
+          tr.text-white.bg-dark
             th.text-center style="font-weight:bold;font-size:16px;" colspan="13"
               = street
-          tr
+          tr.text-white.bg-secondary.text-center
             th Name
             - 1.upto(12).each do |i|
               th = Date::MONTHNAMES[i]
         tbody
           - homeowners.each do |homeowner|
             tr
-              td = homeowner[:name]
+              td.text-white.bg-info
+                b  = homeowner[:name]
               - homeowner[:payments].each_with_index do |p, index|
-                td.text-center
-                  = hidden_field_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 0, id: "payments_#{homeowner[:id]}_#{p[:year]}_#{p[:month]}"
-                  = check_box_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 1, p[:paid], disabled: p[:disabled], class: 'payment_chkbox'
+                td.text-center *{ class: col_bg(p[:status]) }
+                  - if p[:inactive]
+                    | X
+                  - elsif p[:paid]
+                    span style="display:block;font-size:10px;color: #fff;font-weight:bold;" = p[:paid_at]
+                    b OK
+                  - else
+                    = hidden_field_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 0, id: "payments_#{homeowner[:id]}_#{p[:year]}_#{p[:month]}"
+                    = check_box_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 1, p[:paid], disabled: p[:disabled], class: 'payment_chkbox'
 
 
     = submit_tag 'Process', class: 'btn btn-sm btn-primary'

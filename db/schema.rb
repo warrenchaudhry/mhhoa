@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_24_071658) do
+ActiveRecord::Schema.define(version: 2019_02_24_135132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,11 +20,12 @@ ActiveRecord::Schema.define(version: 2019_02_24_071658) do
     t.string "mi"
     t.string "lastname"
     t.bigint "street_id"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "payment_starts_on", default: "2012-01-01"
     t.decimal "monthly_dues_discount", precision: 8, scale: 2, default: "0.0"
+    t.integer "position", default: 0
     t.index ["street_id"], name: "index_homeowners_on_street_id"
   end
 
@@ -41,6 +42,9 @@ ActiveRecord::Schema.define(version: 2019_02_24_071658) do
     t.boolean "fully_paid", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["billable_month", "billable_year"], name: "index_monthly_due_payments_on_billable_month_and_billable_year"
+    t.index ["billable_month"], name: "index_monthly_due_payments_on_billable_month"
+    t.index ["billable_year"], name: "index_monthly_due_payments_on_billable_year"
     t.index ["homeowner_id"], name: "index_monthly_due_payments_on_homeowner_id"
     t.index ["monthly_due_rate_id"], name: "index_monthly_due_payments_on_monthly_due_rate_id"
   end
@@ -59,6 +63,7 @@ ActiveRecord::Schema.define(version: 2019_02_24_071658) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position", default: 0
   end
 
   add_foreign_key "homeowners", "streets"
