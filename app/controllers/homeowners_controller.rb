@@ -69,7 +69,16 @@ class HomeownersController < ApplicationController
   end
 
   def process_payments
-    render json: params
+    payment_params = params.require(:payments).permit!
+    params[:paid_at] = params[:paid_at].present? ? params[:paid_at] : Date.current
+    processed, not_processed = MonthlyDuePayment.process_batch_payments(payment_params, params[:paid_at])
+    if not_processed.any?
+      render json: not_processed
+    else
+      flash[:success] = "Successfully processed #{processed.size} payments."
+      redirect_to payments_homeowners_path
+    end
+
   end
 
   private

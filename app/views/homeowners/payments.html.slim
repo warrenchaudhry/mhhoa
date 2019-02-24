@@ -1,8 +1,11 @@
 h1 Payments
 div.table-responsive
   = form_tag(controller: :homeowners, action: :process_payments)
+    = label_tag :paid_at, 'Payment Date: ', class: 'col-sm-2 col-form-label'
+    = date_field_tag :paid_at, Date.today, class: 'form-control col-sm-3'
+    / = text_field_tag :paid_at, Date.today, class: 'form-control col-sm-6 datetimepicker-input', id: 'datepicker', readonly: true, data: { toggle: 'datetimepicker', target: '#datepicker' }
     - @payments_data.each do |street, homeowners|
-      table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;"
+      table.table.table-bordered.table-hover.table-sm.m-t-20 style="margin-bottom:20px;margin-top:20px;"
         thead
           tr
             th.text-center style="font-weight:bold;font-size:16px;" colspan="13"
@@ -15,12 +18,11 @@ div.table-responsive
           - homeowners.each do |homeowner|
             tr
               td = homeowner[:name]
-              - homeowner[:payments].each do |p|
+              - homeowner[:payments].each_with_index do |p, index|
                 td.text-center
-                  - if p[:paid]
-                    span Paid
-                  - else
-                    = check_box_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 1, p[:paid]
+                  = hidden_field_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 0, id: "payments_#{homeowner[:id]}_#{p[:year]}_#{p[:month]}"
+                  = check_box_tag "payments[#{homeowner[:id]}][#{p[:year]}-#{p[:month]}]", 1, p[:paid], disabled: p[:disabled], class: 'payment_chkbox'
+
 
     = submit_tag 'Process', class: 'btn btn-sm btn-primary'
     hr

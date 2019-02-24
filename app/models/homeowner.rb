@@ -28,14 +28,21 @@ class Homeowner < ApplicationRecord
 
   def build_payment_data(year: Date.today.year)
     data = []
-    1.upto(12).each do |i|
-      payments = MonthlyDuePayment.includes(:monthly_due_payments, :street).where(billable_year: year, billable_month: i, paid: true)
+    1.upto(12).each do |idx|
+      payments = monthly_due_payments.where(billable_year: year, billable_month: idx, paid: true)
+      disabled = if payments.where(paid_at: Date.current).any?
+                   false
+                 elsif payments.any? || (idx != 1 && !data[idx - 2][:paid])
+                   true
+                 else
+                   false
+                 end
       hsh = if payments.any?
-              { id: payments.last.id, paid_at: payments.last.paid_at, total: payments.sum(&:total), paid: true, discount: monthly_dues_discount, amount_required: monthly_rate }
+              { id: payments.last.id, paid_at: payments.last.paid_at, total: payments.sum(&:total), paid: true, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled }
             else
-              { paid: false, discount: monthly_dues_discount, amount_required: monthly_rate }
+              { paid: false, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled }
             end
-      data << hsh.merge!(month: i, year: year)
+      data << hsh.merge!(month: idx, year: year)
     end
     { id: id, name: full_name, payments: data }
   end

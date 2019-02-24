@@ -29,5 +29,10 @@ RSpec.describe MonthlyDuePayment, type: :model do
       subject.reload.update(amount: 500)
       expect(subject.errors.full_messages).to include('Amount should not be greater than 400')
     end
+
+    it 'should not save if paid at is in future' do
+      subject.reload.update(paid_at: Date.tomorrow)
+      expect(subject.errors.full_messages).to include('Paid at should not be in future')
+    end
   end
 end
