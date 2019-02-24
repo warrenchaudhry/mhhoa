@@ -20,7 +20,7 @@ if File.exist?(homeowners_data_file)
     street = Street.find_by('LOWER(name) = ?', key.strip.downcase)
     if street
       data.each do |person|
-        firstname, lastname = person.split(', ').map(&:titleize)
+        lastname, firstname = person.split(', ').map(&:titleize)
         if firstname && lastname
           Homeowner.find_or_create_by(street_id: street.id, firstname: firstname.strip, lastname: lastname)
         else

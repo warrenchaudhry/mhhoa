@@ -63,6 +63,15 @@ class HomeownersController < ApplicationController
     end
   end
 
+  def payments
+    @payments_data = Homeowner.payments_data
+    #render json: @payments_data
+  end
+
+  def process_payments
+    render json: params
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

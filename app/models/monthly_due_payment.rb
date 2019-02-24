@@ -6,15 +6,10 @@ class MonthlyDuePayment < ApplicationRecord
   validates :amount, numericality: { greater_than: 0 }
   validate :check_amount_if_complied
 
-  def homeowner_monthly_rate
-    rate = monthly_due_rate&.amount || MonthlyDueRate&.first&.amount
-    rate -= homeowner.monthly_dues_discount
-  end
-
   def check_amount_if_complied
     return if amount.nil?
-    if amount > homeowner_monthly_rate
-      self.errors.add(:amount, 'should not be greater than %d' % homeowner_monthly_rate)
+    if amount > homeowner.monthly_rate
+      self.errors.add(:amount, 'should not be greater than %d' % homeowner.monthly_rate)
     else
       true
     end

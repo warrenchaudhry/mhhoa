@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :homeowners
+  resources :homeowners do
+    collection do
+      get :payments
+      post :process_payments
+    end
+  end
   resources :streets
   root to: 'homeowners#index'
   get 'home/index'
