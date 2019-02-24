@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_23_180949) do
+ActiveRecord::Schema.define(version: 2019_02_24_071658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,23 @@ ActiveRecord::Schema.define(version: 2019_02_23_180949) do
     t.date "payment_starts_on", default: "2012-01-01"
     t.decimal "monthly_dues_discount", precision: 8, scale: 2, default: "0.0"
     t.index ["street_id"], name: "index_homeowners_on_street_id"
+  end
+
+  create_table "monthly_due_payments", force: :cascade do |t|
+    t.bigint "homeowner_id"
+    t.bigint "monthly_due_rate_id"
+    t.decimal "amount", precision: 8, scale: 2, default: "0.0"
+    t.decimal "discount", precision: 8, scale: 2, default: "0.0"
+    t.decimal "total", precision: 8, scale: 2, default: "0.0"
+    t.integer "billable_month"
+    t.integer "billable_year"
+    t.boolean "paid", default: false
+    t.date "paid_at"
+    t.boolean "fully_paid", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["homeowner_id"], name: "index_monthly_due_payments_on_homeowner_id"
+    t.index ["monthly_due_rate_id"], name: "index_monthly_due_payments_on_monthly_due_rate_id"
   end
 
   create_table "monthly_due_rates", force: :cascade do |t|
@@ -45,4 +62,6 @@ ActiveRecord::Schema.define(version: 2019_02_23_180949) do
   end
 
   add_foreign_key "homeowners", "streets"
+  add_foreign_key "monthly_due_payments", "homeowners"
+  add_foreign_key "monthly_due_payments", "monthly_due_rates"
 end
