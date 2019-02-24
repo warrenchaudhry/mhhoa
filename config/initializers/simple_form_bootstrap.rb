@@ -408,6 +408,22 @@ SimpleForm.setup do |config|
     b.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
   end
 
+  config.wrappers :datepicker_bootstrap, tag: 'div', class: 'form-group row', error_class: 'form-group-invalid' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :minlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+    b.use :label, class: 'col-sm-3 col-form-label'
+    b.wrapper :grid_wrapper, tag: 'div', class: 'col-sm-9 datepicker' do |ba|
+      ba.use :input, class: 'form-control', error_class: 'is-invalid'
+      ba.use :full_error, wrap_with: { tag: 'div', class: 'invalid-feedback' }
+      ba.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
+    end
+  end
+
 
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :vertical_form

@@ -22,7 +22,7 @@ if File.exist?(homeowners_data_file)
       data.each do |person|
         firstname, lastname = person.split(', ').map(&:titleize)
         if firstname && lastname
-          Homeowner.create(street_id: street.id, firstname: firstname.strip, lastname: lastname)
+          Homeowner.find_or_create_by(street_id: street.id, firstname: firstname.strip, lastname: lastname)
         else
           puts 'Unable to store data for %s in street %s' % [person, street.name]
         end
@@ -30,3 +30,6 @@ if File.exist?(homeowners_data_file)
     end
   end
 end
+
+# create default monthly due rates
+MonthlyDueRate.find_or_create_by(amount: 400, start_date: '2018-01-01', locked: true)

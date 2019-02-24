@@ -17,7 +17,7 @@ div.table-responsive
         - homeowners.each do |homeowner|
           tr
             td = homeowner.full_name
-            td = homeowner.active? ? 'Yes' : 'No'
+            td = yes_or_no(homeowner.active)
             td = link_to 'Show', homeowner
             td = link_to 'Edit', edit_homeowner_path(homeowner)
             td = link_to 'Delete', homeowner, data: { confirm: 'Are you sure?' }, method: :delete

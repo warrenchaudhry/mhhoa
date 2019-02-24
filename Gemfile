@@ -32,6 +32,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap4-datetime-picker-rails'
 gem 'jquery-rails'
 gem 'slim-rails'
 # Reduces boot times through caching; required in config/boot.rb

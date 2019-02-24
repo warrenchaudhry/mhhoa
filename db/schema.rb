@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2019_02_23_180949) do
     t.date "start_date", default: "2018-01-01"
     t.date "end_date"
     t.boolean "recurring", default: true
+    t.boolean "locked", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

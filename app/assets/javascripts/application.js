@@ -15,4 +15,11 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+//= require moment
+//= require tempusdominus-bootstrap-4
 //= require_tree .
+
+$(function(){
+  $('#datepicker').datetimepicker({ format: 'YYYY-MM-DD', ignoreReadonly: true });
+});
+

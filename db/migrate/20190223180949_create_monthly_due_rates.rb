@@ -5,6 +5,7 @@ class CreateMonthlyDueRates < ActiveRecord::Migration[5.2]
       t.date :start_date, default: '2018-01-01'
       t.date :end_date
       t.boolean :recurring, default: true
+      t.boolean :locked, default: true
 
       t.timestamps
     end

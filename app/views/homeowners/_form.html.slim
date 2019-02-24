@@ -3,6 +3,6 @@
   = f.input :lastname
   = f.input :street_id, collection: Street.all, prompt: '-- Select street --', include_blank: true
   = f.input :monthly_dues_discount
-  = f.input :payment_starts_on
+  = f.input :payment_starts_on, as: :string, input_html: { id: 'datepicker', readonly: true, class: 'datetimepicker-input', data: { toggle: 'datetimepicker', target: '#datepicker', defaultDate: f.object.payment_starts_on }  }
   = f.input :active
   = f.button :submit, class: 'btn btn-sm btn-primary'

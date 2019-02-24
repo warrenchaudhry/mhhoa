@@ -14,7 +14,7 @@ p
   = @homeowner.street
 p
   strong Active:
-  = @homeowner.active
+  = yes_or_no(@homeowner.active)
 
 => link_to 'Edit', edit_homeowner_path(@homeowner)
 '|
