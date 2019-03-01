@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_24_135132) do
+ActiveRecord::Schema.define(version: 2019_03_01_115117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "employees", force: :cascade do |t|
+    t.string "firstname"
+    t.string "lastname"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "employee_type", default: 0
+    t.decimal "rate", default: "0.0"
+    t.integer "payment_mode", default: 0
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "homeowners", force: :cascade do |t|
     t.string "firstname"

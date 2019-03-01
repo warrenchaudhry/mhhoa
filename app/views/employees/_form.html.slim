@@ -1,0 +1,10 @@
+= simple_form_for @employee, wrapper: :horizontal_form do |f|
+  = f.input :firstname
+  = f.input :lastname
+  = f.input :start_date, as: :string, input_html: { id: 'datepicker', readonly: true, class: 'datetimepicker-input', value: f.object.start_date, data: { toggle: 'datetimepicker', target: '#datepicker', defaultDate: f.object.start_date }  }
+  = f.input :end_date, as: :string, input_html: { id: 'datepicker', readonly: true, class: 'datetimepicker-input', value: f.object.end_date,  data: { toggle: 'datetimepicker', target: '#datepicker', defaultDate: f.object.end_date }  }
+  = f.input :employee_type, collection: Employee.employee_types.map { |k,v| [k.titleize, k] }, include_blank: '-- Select employee type --'
+  = f.input :rate
+  = f.input :payment_mode, collection: Employee.payment_modes.map { |k,v| [k.titleize, k] }, include_blank: '-- Select payment mode --'
+  = f.input :active
+  = f.button :submit, class: 'btn btn-sm btn-primary'

@@ -1,0 +1,32 @@
+h1 Listing employees
+div.table-responsive
+
+  table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;"
+    thead
+      tr
+        th Name
+        th Type
+        th Start date
+        th End date
+        th Rate
+        th Payment Mode
+        th Active
+        th.text-center colspan="3" Actions
+      tbody
+        - @employees.each do |employee|
+          tr
+            td = employee.full_name
+            td = employee.employee_type.titleize
+            td = employee.start_date
+            td = employee.end_date
+            td = employee.rate
+            td = employee.payment_mode.titleize
+            td = yes_or_no(employee.active)
+            td = link_to 'Show', employee_path(employee)
+            td = link_to 'Edit', edit_employee_path(employee)
+            td = link_to 'Delete', employee_path(employee), data: { confirm: 'Are you sure?' }, method: :delete
+    hr
+
+
+
+= link_to 'New Employee', new_employee_path

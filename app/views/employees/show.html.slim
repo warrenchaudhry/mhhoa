@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Firstname:
+  = @employee.firstname
+p
+  strong Lastname:
+  = @employee.lastname
+p
+  strong Start Date:
+  = @employee.start_date
+p
+  strong End Date:
+  = @employee.end_date
+p
+  strong Type:
+  = @employee.employee_type.titleize
+p
+  strong Payment Mode:
+  = @employee.payment_mode.titleize
+p
+  strong Active:
+  = yes_or_no(@employee.active)
+
+=> link_to 'Edit', edit_employee_path(@employee)
+'|
+=< link_to 'Back', employees_path

@@ -1,4 +1,12 @@
-h1 Update payments for #{params[:year]}
+h1
+  | Update payments for #{params[:year]}
+.row
+  .col-md-6
+    = link_to("&laquo; #{params[:year].to_i - 1}".html_safe, batch_payments_path(year: (params[:year].to_i - 1)), class: 'text-left btn btn-sm btn-info', style: 'font-size:16px;')
+  .col-md-6
+    = link_to("#{params[:year].to_i + 1} &raquo;".html_safe, batch_payments_path(year: (params[:year].to_i + 1)), class: 'text-right btn btn-sm btn-info', style: 'font-size:16px;float:right;')
+  .clearfix
+hr
 div.table-responsive
   = form_tag(controller: :payments, action: :process_batch)
   = hidden_field_tag :year, params[:year]
