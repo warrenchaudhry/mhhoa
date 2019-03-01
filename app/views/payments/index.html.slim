@@ -1,0 +1,36 @@
+h1
+  | Payments for #{params[:year]}
+  span style="font-size:14px;margin-left:10px;vertical-align:middle;" = link_to '[edit]', batch_payments_path(year: params[:year])
+hr
+div.row
+  .col-md-6
+    = link_to("&laquo; #{params[:year].to_i - 1}".html_safe, payments_path(year: (params[:year].to_i - 1)), class: 'text-left', style: 'display:block;font-size:16px;')
+  .col-md-6
+    = link_to("#{params[:year].to_i + 1} &raquo;".html_safe, payments_path(year: (params[:year].to_i + 1)), class: 'text-right', style: 'display:block;font-size:16px;')
+  .clearfix
+.table-responsive
+  - @payments_data.each do |street, homeowners|
+    table.table.table-bordered.table-hover.table-sm.m-t-20 style="margin-bottom:20px;margin-top:20px;"
+      thead
+        tr.text-white.bg-dark
+          th.text-center style="font-weight:bold;font-size:16px;padding:5px;" colspan="13"
+            = street
+        tr.text-white.bg-secondary.text-center
+          th Name
+          - 1.upto(12).each do |i|
+            th = Date::MONTHNAMES[i][0..2]
+      tbody
+        - homeowners.each do |homeowner|
+          tr
+            td.text-white.bg-info style="padding:5px;"
+              b  = homeowner[:name]
+            - homeowner[:payments].each_with_index do |p, index|
+              td.text-center *{ class: col_bg(p[:status]) }
+                - if p[:inactive]
+                  | X
+                - elsif p[:paid]
+                  span style="font-size:10px;color: #fff;font-weight:bold;" = p[:paid_at]
+                  br
+                  b OK
+
+  hr

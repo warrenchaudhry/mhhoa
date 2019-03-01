@@ -1,32 +1,40 @@
 h1 Collection Report
 div.table-responsive
-  table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;width:800px;"
-    thead
-      tr
-        th Name
-        th Street
-        th Payment Months
-        th Payment Dates
-        th Total
-    tbody
-      - @payments.each do |homeowner, payments|
+  = form_tag({controller: :reports, action: :index}, method: :get)
+    .row
+      = label_tag :start_date, 'Start Date: ', class: 'col-sm-2 col-form-label'
+      = date_field_tag :start_date, params[:start_date], class: 'form-control col-sm-2'
+      = label_tag :end_date, 'End Date: ', class: 'col-sm-2 col-form-label'
+      = date_field_tag :end_date, params[:end_date], class: 'form-control col-sm-2'
+      = submit_tag 'Filter', class: 'btn btn-sm btn-primary col-sm-2'
+    hr
+    table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;width:800px;margin-top:30px;"
+      thead
         tr
-          td = homeowner.full_name
-          td = homeowner.street
+          th Name
+          th Street
+          th Payment Months
+          th Payment Dates
+          th Total
+      tbody
+        - @payments.each do |homeowner, payments|
+          tr
+            td = homeowner.full_name
+            td = homeowner.street
+            td
+              ul.list-unstyled
+                - payments.collect {|p| [Date::MONTHNAMES[p.billable_month], p.billable_year].join('-') }.uniq.each do |d|
+                  li = d
+            td.text-justify = payments.collect(&:paid_at).uniq.join('<br/>').html_safe
+            td.text-right = number_with_precision(payments.sum(&:total), precision: 2, delimiter: ',')
+        tr
           td
-            ul.list-unstyled
-              - payments.collect {|p| [Date::MONTHNAMES[p.billable_month], p.billable_year].join('-') }.uniq.each do |d|
-                li = d
-          td = payments.collect(&:paid_at).uniq.to_sentence
-          td = payments.sum(&:total)
-      tr
-        td
-        td
-        td
-        td
-          b Total
-        td
-          b = @payments.values.flatten.sum(&:total)
+          td
+          td
+          td
+            b Total #{@payments.values.map {|v| v.collect(&:paid_at).uniq.size}.sum} receipts
+          td.text-right
+            b = number_to_currency(@payments.values.flatten.sum(&:total), unit: 'P')
 
   hr
 
