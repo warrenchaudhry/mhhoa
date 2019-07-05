@@ -4,6 +4,7 @@ class MonthlyDuePayment < ApplicationRecord
 
   validates :amount, :billable_month, :billable_year, :paid_at, presence: true, allow_blank: false
   validates :amount, numericality: { greater_than: 0 }
+  validates_uniqueness_of :receipt_no, scope: [:billable_month, :billable_year], allow_blank: true
   validate :check_paid_at
   validate :check_amount_if_complied
 
@@ -41,6 +42,11 @@ class MonthlyDuePayment < ApplicationRecord
       end
     end
     [processed, unprocessed]
+  end
+
+  def note
+    return nil if fully_paid
+    '(partial - %s)' % amount
   end
 
   def check_amount_if_complied

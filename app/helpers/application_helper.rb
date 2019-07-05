@@ -22,6 +22,8 @@ module ApplicationHelper
       'bg-warning'
     elsif status == 'paid'
       'bg-success'
+    elsif status == 'partial'
+      'bg-primary'
     end
   end
 end

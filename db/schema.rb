@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_01_115117) do
+ActiveRecord::Schema.define(version: 2019_07_05_023514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2019_03_01_115117) do
     t.boolean "fully_paid", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "receipt_no"
     t.index ["billable_month", "billable_year"], name: "index_monthly_due_payments_on_billable_month_and_billable_year"
     t.index ["billable_month"], name: "index_monthly_due_payments_on_billable_month"
     t.index ["billable_year"], name: "index_monthly_due_payments_on_billable_year"

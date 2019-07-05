@@ -8,7 +8,7 @@ div.table-responsive
       = date_field_tag :end_date, params[:end_date], class: 'form-control col-sm-2'
       = submit_tag 'Filter', class: 'btn btn-sm btn-primary col-sm-2'
     hr
-    table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;width:800px;margin-top:30px;"
+    table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;margin-top:30px;"
       thead
         tr
           th Name
@@ -19,11 +19,11 @@ div.table-responsive
       tbody
         - @payments.each do |homeowner, payments|
           tr
-            td = homeowner.full_name
-            td = homeowner.street
+            td = homeowner[0].full_name
+            td = homeowner[0].street
             td
               ul.list-unstyled
-                - payments.collect {|p| [Date::MONTHNAMES[p.billable_month], p.billable_year].join('-') }.uniq.each do |d|
+                - payments.sort_by { |p| [p.billable_year, p.billable_month] }.collect {|p| [Date::MONTHNAMES[p.billable_month], p.billable_year, p.note].compact.join('-') }.uniq.each do |d|
                   li = d
             td.text-justify = payments.collect(&:paid_at).uniq.join('<br/>').html_safe
             td.text-right = number_with_precision(payments.sum(&:total), precision: 2, delimiter: ',')

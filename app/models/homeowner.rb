@@ -46,7 +46,7 @@ class Homeowner < ApplicationRecord
                    false
                  end
       hsh = if payments.any?
-              { id: payments.last.id, paid_at: payments.last.paid_at, total: payments.sum(&:total), paid: true, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled, status: 'paid' }
+              { id: payments.last.id, paid_at: payments.last.paid_at, total: payments.sum(&:total), paid: true, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled, status: ((payments.sum(&:total) < monthly_rate) ? 'partial' : 'paid') }
             else
               { paid: false, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled, status: 'pending' }
             end
