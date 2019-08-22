@@ -1,0 +1,28 @@
+.table-responsive
+  - payments_data.each do |street, homeowners|
+    div#p-b*{style: ((%w(Iris Larkspur).include?(street) && request.format.pdf?) ? 'display: block;clear: both;page-break-before: always;' : nil) }
+
+    table.table.table-bordered.table-hover.table-sm.m-t-20 style="margin-bottom:20px;margin-top:20px;"
+      tbody
+        tr.text-white.bg-dark
+          td.text-center style="font-weight:bold;font-size:16px;padding:5px;" colspan="13"
+            = street
+        tr.text-white.bg-secondary.text-center
+          td Name
+          - 1.upto(12).each do |i|
+            td*{style: request.format.pdf? ? 'width:70px;' : nil} = Date::MONTHNAMES[i][0..2]
+        - homeowners.each do |homeowner|
+          tr style="page-break-inside: avoid;"
+            td.text-white.bg-info style="padding:5px;"
+              b  = link_to homeowner[:name], homeowner_path(homeowner[:id]), style: 'color:#fff !important;'
+            - homeowner[:payments].each_with_index do |p, index|
+              td.text-center *{ class: col_bg(p[:status]) }
+                - if p[:inactive]
+                  | X
+                - elsif p[:paid]
+                  span style="font-size:10px;font-weight:bold;"
+                    = link_to(payment_path(p[:id]), style: 'color:#fff !important;') do
+                      = p[:paid_at]
+                      br
+                      b style="color:#000 !important;" = p[:status] == 'paid' ? 'OK' : p[:total]
+    .pagebreak

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :homeowners
   resources :streets
   resources :reports, only: [:index]
-  resources :payments, only: [:index] do
+  resources :payments do
     collection do
       get :batch
       post :process_batch

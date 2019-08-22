@@ -1,0 +1,19 @@
+h1
+  | Payment for #{params[:id]}
+
+hr
+.row-fluid
+  p
+    b
+      | Homeowner:
+    = @payment.homeowner.full_name
+  p
+    b
+      | Paid at:
+    = @payment.paid_at
+  p
+    b
+      | For month of:
+    = @payment.billable_date
+
+= link_to 'Edit', edit_payment_path(@payment), class: 'btn btn-warning btn-sm'

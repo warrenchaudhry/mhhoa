@@ -44,6 +44,10 @@ class MonthlyDuePayment < ApplicationRecord
     [processed, unprocessed]
   end
 
+  def billable_date
+    [Date::MONTHNAMES[billable_month], billable_year].compact.join(' ')
+  end
+
   def note
     return nil if fully_paid
     '(partial - %s)' % amount

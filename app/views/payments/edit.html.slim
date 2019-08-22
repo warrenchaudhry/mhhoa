@@ -1,0 +1,12 @@
+= simple_form_for @payment, as: :payments, url: payment_path(@payment), method: :put, wrapper: :horizontal_form do |f|
+  = f.input :homeowner_id, collection: Homeowner.active.map {|h| [h.full_name, h.id]}, include_blank: '-- Select homeowner --'
+  = f.input :amount
+  = f.input :discount
+  = f.input :billable_month, collection: 1.upto(12).map {|i| [get_month_literal(i), i]}
+  = f.input :billable_year
+  = f.input :paid_at, as: :string, input_html: { type: :date }
+  = f.input :fully_paid
+  = f.input :receipt_no
+  = f.button :submit, class: 'btn btn-sm btn-primary'
+  = link_to 'Back', payments_path, class: 'btn btn-info btn-sm', style: 'margin-left: 10px;'
+

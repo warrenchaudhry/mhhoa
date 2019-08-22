@@ -1,0 +1,28 @@
+table.table.table-bordered.table-hover.table-sm style="margin-bottom:20px;margin-top:30px;"
+  tbody
+    tr.text-white.bg-secondary.text-center
+      td Name
+      td Street
+      td Payment Months
+      td Payment Dates
+      td Total
+    - payments.each do |homeowner, payments|
+      tr
+        td
+          strong = homeowner[0].full_name
+        td = homeowner[0].street
+        td
+          = payments_coverage(payments)
+          / ul.list-unstyled
+          /   - payments.sort_by { |p| [p.billable_year, p.billable_month] }.collect {|p| [Date::MONTHNAMES[p.billable_month], p.billable_year, p.note].compact.join('-') }.uniq.each do |d|
+          /     li = d
+        td.text-justify = payments.collect(&:paid_at).uniq.join('<br/>').html_safe
+        td.text-right = number_with_precision(payments.sum(&:total), precision: 2, delimiter: ',')
+    tr
+      td
+      td
+      td
+      td
+        b Total #{payments.values.map {|v| v.collect(&:paid_at).uniq.size}.sum} receipts
+      td.text-right
+        b = number_to_currency(payments.values.flatten.sum(&:total), unit: 'P')

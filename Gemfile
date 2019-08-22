@@ -71,3 +71,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'rubocop', '~> 0.65.0', require: false
 gem 'simple_form'
+
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'

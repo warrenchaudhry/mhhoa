@@ -18,7 +18,7 @@ class Homeowner < ApplicationRecord
 
   def self.payments_data(year: Date.today.year)
     data = {}
-    group = Homeowner.active.joins(:street).includes(:street).order('streets.position ASC').group_by { |h| h.street.name }
+    group = Homeowner.active.joins(:street).includes(:street, :monthly_due_payments).order('streets.position ASC').to_a.group_by { |h| h.street.name }
     group.each do |street, homeowners|
       items = homeowners.collect { |h| h.build_payment_data(year: year) }
       data[street] = items

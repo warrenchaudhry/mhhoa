@@ -26,4 +26,23 @@ module ApplicationHelper
       'bg-primary'
     end
   end
+
+  def payments_coverage(payments)
+    res = []
+    grouped = payments.sort_by(&:billable_year).group_by(&:billable_year)
+    grouped.each do |year, mdps|
+      if mdps.size > 1
+        min = mdps.collect(&:billable_month).min
+        max = mdps.collect(&:billable_month).max
+        res << '%s-%s %s' % [get_month_literal(min), get_month_literal(max), year]
+      else
+        res << mdps.last.billable_date
+      end
+    end
+    res.join('<br>').html_safe
+  end
+
+  def get_month_literal(num)
+    Date::MONTHNAMES[num]
+  end
 end
