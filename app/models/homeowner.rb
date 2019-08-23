@@ -10,6 +10,10 @@ class Homeowner < ApplicationRecord
   end
 
   def monthly_rate
+    @monthly_rate ||= monthly_due_rate
+  end
+
+  def monthly_due_rate
     rate = MonthlyDueRate&.first&.amount || 0
     rate -= monthly_dues_discount
     return 0 if rate < 0
@@ -28,15 +32,16 @@ class Homeowner < ApplicationRecord
 
   def build_payment_data(year: Date.today.year)
     data = []
+    current_payments = monthly_due_payments.where(billable_year: year, paid: true)
     1.upto(12).each do |idx|
       chk_date = Date.new(year.to_i, idx, 1)
       if payment_starts_on && payment_starts_on.beginning_of_month > chk_date
         data << { inactive: true, status: 'inactive'  }
         next
       end
-      payments = monthly_due_payments.where(billable_year: year, billable_month: idx, paid: true)
+      payments = current_payments.select { |p| p.billable_month == idx }
       # byebug if payments.pluck(:id).include?(9)
-      disabled = if payments.where(paid_at: Date.current).any?
+      disabled = if payments.select {|p| p.paid_at == Date.current }.any?
                    false
                  elsif year.to_s != Date.current.year.to_s && payments.empty?
                    false
