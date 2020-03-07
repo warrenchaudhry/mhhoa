@@ -14,20 +14,27 @@ class MonthlyDuePayment < ApplicationRecord
     processed = []
     payment_params.each do |homeowner_id, items|
       homeowner = Homeowner.find_by(id: homeowner_id)
+      receipt_no = items['receipt_no']
+      paid_items = items.except('receipt_no').reject { |_, v| v.to_i.zero? }
       if homeowner
-        items.each do |date, val|
+        paid_items.each do |date, val|
+          next if date == 'receipt_no'
+
           new_record = false
           updated = false
           year, month = date.split('-')
           mp = homeowner.monthly_due_payments.find_or_initialize_by(billable_month: month, billable_year: year)
-          attr = { amount: homeowner.monthly_rate, total: homeowner.monthly_rate, monthly_due_rate_id: monthly_due_rate.id, paid_at: paid_at }
+          attr = { amount: homeowner.monthly_rate, total: homeowner.monthly_rate, monthly_due_rate_id: monthly_due_rate.id, paid_at: paid_at, receipt_no: receipt_no }
           paid = val.to_bool
           if mp.new_record?
             next unless paid
-            attr.merge!(paid: true, fully_paid: true)
+
+            attr[:paid] = true
+            attr[:fully_paid] = true
             new_record = true
           else
-            attr.merge!(paid: val, fully_paid: val)
+            attr[:paid] = val
+            attr[:fully_paid] = val
             updated = mp.paid? != paid
           end
 
@@ -50,6 +57,7 @@ class MonthlyDuePayment < ApplicationRecord
 
   def note
     return nil if fully_paid
+
     '(partial - %s)' % amount
   end
 

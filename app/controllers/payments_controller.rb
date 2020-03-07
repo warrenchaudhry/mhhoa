@@ -22,6 +22,7 @@ class PaymentsController < ApplicationController
   def batch
     params[:year] ||= Date.today.year
     @payments_data = Homeowner.payments_data(year: params[:year])
+    params[:base_receipt_no] ||= MonthlyDuePayment.where.not(receipt_no: nil).order('receipt_no ASC').last.receipt_no
     # render json: @payments_data
   end
 
@@ -42,6 +43,7 @@ class PaymentsController < ApplicationController
 
   def process_batch
     payment_params = params.require(:payments).permit!
+    #render json: payment_params
     params[:paid_at] = params[:paid_at].present? ? params[:paid_at] : Date.current
     processed, not_processed = MonthlyDuePayment.process_batch_payments(payment_params, params[:paid_at])
     if not_processed.any?

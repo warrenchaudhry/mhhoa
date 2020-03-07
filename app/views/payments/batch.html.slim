@@ -9,6 +9,7 @@ h1
 hr
 div.table-responsive
   = form_tag(controller: :payments, action: :process_batch)
+  = text_field_tag :base_receipt_no, params[:base_receipt_no]
   = hidden_field_tag :year, params[:year]
   .row
     = label_tag :paid_at, 'Enter payment date: ', class: 'col-sm-2 col-form-label'
@@ -26,8 +27,9 @@ div.table-responsive
             th = Date::MONTHNAMES[i][0..2]
       tbody
         - homeowners.each do |homeowner|
-          tr
+          tr *{ id: "tr-homeowner-#{homeowner[:id]}", data: { 'item-id' => homeowner[:id] } }
             td.text-white.bg-info
+              = hidden_field_tag "payments[#{homeowner[:id]}][receipt_no]", nil, id: "payments_#{homeowner[:id]}_receipt_no"
               b  = homeowner[:name]
             - homeowner[:payments].each_with_index do |p, index|
               td.text-center *{ class: col_bg(p[:status]) }

@@ -16,4 +16,14 @@ hr
       | For month of:
     = @payment.billable_date
 
+  p
+    b
+      | Amount:
+    = @payment.total
+
+  p
+    b
+      | Receipt no:
+    = @payment.receipt_no
+
 = link_to 'Edit', edit_payment_path(@payment), class: 'btn btn-warning btn-sm'

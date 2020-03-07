@@ -6,8 +6,7 @@ class ReportsController < ApplicationController
     @payments = MonthlyDuePayment.
                   includes(homeowner: :street).
                   where(paid_at: params[:start_date]..params[:end_date], paid: true).
-                  order(billable_month: :asc, billable_year: :asc).
-                  sort_by {|k| [k.paid_at] }.group_by { |p| [p.homeowner, p.paid_at]}
+                  order(receipt_no: :asc).group_by(&:homeowner)
     respond_to do |format|
       format.html
       format.json { render json: @payments }

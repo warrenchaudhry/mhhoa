@@ -16,7 +16,9 @@ class Homeowner < ApplicationRecord
   def monthly_due_rate
     rate = MonthlyDueRate&.first&.amount || 0
     rate -= monthly_dues_discount
-    return 0 if rate < 0
+
+    return 0 if rate.negative?
+
     rate
   end
 
@@ -24,7 +26,7 @@ class Homeowner < ApplicationRecord
     data = {}
     group = Homeowner.active.joins(:street).includes(:street, :monthly_due_payments).order('streets.position ASC').to_a.group_by { |h| h.street.name }
     group.each do |street, homeowners|
-      items = homeowners.collect { |h| h.build_payment_data(year: year) }
+      items = homeowners.sort_by(&:created_at).map { |h| h.build_payment_data(year: year) }
       data[street] = items
     end
     data
@@ -36,12 +38,12 @@ class Homeowner < ApplicationRecord
     1.upto(12).each do |idx|
       chk_date = Date.new(year.to_i, idx, 1)
       if payment_starts_on && payment_starts_on.beginning_of_month > chk_date
-        data << { inactive: true, status: 'inactive'  }
+        data << { inactive: true, status: 'inactive' }
         next
       end
       payments = current_payments.select { |p| p.billable_month == idx }
       # byebug if payments.pluck(:id).include?(9)
-      disabled = if payments.select {|p| p.paid_at == Date.current }.any?
+      disabled = if payments.select { |p| p.paid_at == Date.current }.any?
                    false
                  elsif year.to_s != Date.current.year.to_s && payments.empty?
                    false
@@ -51,9 +53,25 @@ class Homeowner < ApplicationRecord
                    false
                  end
       hsh = if payments.any?
-              { id: payments.last.id, paid_at: payments.last.paid_at, total: payments.sum(&:total), paid: true, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled, status: ((payments.sum(&:total) < monthly_rate) ? 'partial' : 'paid') }
+              {
+                id: payments.last.id,
+                receipt_no: payments.map(&:receipt_no).compact.uniq.join(', '),
+                paid_at: payments.last.paid_at,
+                total: payments.sum(&:total),
+                paid: true,
+                discount: monthly_dues_discount,
+                amount_required: monthly_rate,
+                disabled: disabled,
+                status: payments.sum(&:total) < monthly_rate ? 'partial' : 'paid'
+              }
             else
-              { paid: false, discount: monthly_dues_discount, amount_required: monthly_rate, disabled: disabled, status: 'pending' }
+              {
+                paid: false,
+                discount: monthly_dues_discount,
+                amount_required: monthly_rate,
+                disabled: disabled,
+                status: 'pending'
+              }
             end
       data << hsh.merge!(month: idx, year: year)
     end

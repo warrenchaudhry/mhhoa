@@ -1,6 +1,7 @@
 .table-responsive
+  - margin_styles = { 'Gladiola' => 60, 'Iris' => '36', 'Larkspur' => '20', 'Marigold' => '40' }
   - payments_data.each do |street, homeowners|
-    div#p-b*{style: ((%w(Iris Larkspur).include?(street) && request.format.pdf?) ? 'display: block;clear: both;page-break-before: always;' : nil) }
+    div#p-b*{style: ((margin_styles.keys.include?(street) && request.format.pdf?) ? "margin-top: #{margin_styles[street]}px;display: block;clear: both;page-break-before: always !important;" : nil) }
 
     table.table.table-bordered.table-hover.table-sm.m-t-20 style="margin-bottom:20px;margin-top:20px;"
       tbody
@@ -23,6 +24,9 @@
                   span style="font-size:10px;font-weight:bold;"
                     = link_to(payment_path(p[:id]), style: 'color:#fff !important;') do
                       = p[:paid_at]
-                      br
-                      b style="color:#000 !important;" = p[:status] == 'paid' ? 'OK' : p[:total]
+                      span style="color:#000 !important;display:block;font-weight:bold;"
+                        - if p[:status] == 'paid'
+                          = p[:receipt_no].present? ? "OR # #{p[:receipt_no]}" : 'OK'
+                        - else
+                          = p[:total]
     .pagebreak
