@@ -1,4 +1,4 @@
-# Simple Homeowners application to track monthly dues payment
+# Simple Homeowner's application to track monthly dues payment
 
 # README
 
