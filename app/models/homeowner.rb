@@ -34,10 +34,10 @@ class Homeowner < ApplicationRecord
 
   def build_payment_data(year: Date.today.year)
     data = []
-    current_payments = monthly_due_payments.where(billable_year: year, paid: true)
+    current_payments = monthly_due_payments.where(billable_year: year, paid: true).order(billable_month: :asc)
     1.upto(12).each do |idx|
       chk_date = Date.new(year.to_i, idx, 1)
-      if payment_starts_on && payment_starts_on.beginning_of_month > chk_date
+      if payment_starts_on && payment_starts_on.beginning_of_month > chk_date && current_payments.empty?
         data << { inactive: true, status: 'inactive' }
         next
       end
@@ -56,13 +56,18 @@ class Homeowner < ApplicationRecord
               {
                 id: payments.last.id,
                 receipt_no: payments.map(&:receipt_no).compact.uniq.join(', '),
-                paid_at: payments.last.paid_at,
+                paid_at: payments.last.paid_at.strftime('%b %d, %Y'),
                 total: payments.sum(&:total),
                 paid: true,
                 discount: monthly_dues_discount,
                 amount_required: monthly_rate,
                 disabled: disabled,
                 status: payments.sum(&:total) < monthly_rate ? 'partial' : 'paid'
+              }
+            elsif payment_starts_on && chk_date < payment_starts_on.beginning_of_month
+              {
+                inactive: true,
+                status: 'inactive'
               }
             else
               {

@@ -6,9 +6,10 @@ class MonthlyDuePayment < ApplicationRecord
   validates :amount, numericality: { greater_than: 0 }
   validates_uniqueness_of :receipt_no, scope: [:billable_month, :billable_year], allow_blank: true
   validate :check_paid_at
-  validate :check_amount_if_complied
+  # validate :check_amount_if_complied
 
   def self.process_batch_payments(payment_params, paid_at)
+
     monthly_due_rate = MonthlyDueRate.first
     unprocessed = []
     processed = []
